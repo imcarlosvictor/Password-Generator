@@ -129,6 +129,9 @@ class MainWindow(QtWidgets.QWidget):
         # Display password
         self.display.setText(password)
 
+        # Reset parameters
+        self.pw_params = ''
+
 
 def main():
     app = QtWidgets.QApplication(sys.argv)

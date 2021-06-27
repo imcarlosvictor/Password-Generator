@@ -12,23 +12,37 @@ class MainWindow(QtWidgets.QWidget):
         self.setWindowTitle("Password Generator")
         self.setGeometry(3000, 500, 400, 500)
         self.setLayout(QtWidgets.QVBoxLayout())
-        self.contents()
+
+        # Add Contents
+        self.add_display()
+        self.add_slider()
+        self.add_checkboxes()
+        self.add_button()
 
         self.pw_params = ""
 
         self.show()
 
-    def contents(self):
-        """Add all buttons"""
+    def add_display(self):
+        """Creates display."""
 
-        container = QtWidgets.QWidget()  # Create widget
-        container.setLayout(QtWidgets.QGridLayout())
+        container = QtWidgets.QWidget()
+        container.setLayout(QtWidgets.QHBoxLayout())
 
-        # ------------------[Widgets]----------------------
         # Display
         self.display = QtWidgets.QLineEdit()
         self.display.font().setPointSize(32)
         self.display.setPlaceholderText("password")
+
+        container.layout().addWidget(self.display)
+
+        self.layout().addWidget(container)
+
+    def add_slider(self):
+        """Creates slider"""
+
+        container = QtWidgets.QWidget()
+        container.setLayout(QtWidgets.QHBoxLayout())
 
         # Slider
         self.sld_pw_length = QtWidgets.QSlider(QtCore.Qt.Horizontal)
@@ -41,6 +55,23 @@ class MainWindow(QtWidgets.QWidget):
         # Displaying Slider value
         self.sld_pw_length.valueChanged.connect(self.update_slider_value)
 
+        # Labels
+        lbl_minimum = QtWidgets.QLabel('0')
+        lbl_maximum = QtWidgets.QLabel('16')
+
+        container.layout().addWidget(lbl_minimum)
+        container.layout().addWidget(self.sld_pw_length)
+        container.layout().addWidget(lbl_maximum)
+
+        self.layout().addWidget(container)
+
+    def add_checkboxes(self):
+        """Add all buttons"""
+
+        container = QtWidgets.QWidget()  # Create widget
+        container.setLayout(QtWidgets.QGridLayout())
+
+        # ------------------[Widgets]----------------------
         # CheckBox
         self.chkbox_uppercase = QtWidgets.QCheckBox()
         self.chkbox_lowercase = QtWidgets.QCheckBox()
@@ -50,8 +81,6 @@ class MainWindow(QtWidgets.QWidget):
         # Labels
         lbl_length = QtWidgets.QLabel("Password length:")
         self.sld_pw_length_val = QtWidgets.QLabel('')
-        # lbl_min_length = QtWidgets.QLabel("0")
-        # lbl_max_length = QtWidgets.QLabel("16")
         lbl_uppercase = QtWidgets.QLabel("Include Uppercase")
         lbl_lowercase = QtWidgets.QLabel("Include Lowercase")
         lbl_numbers = QtWidgets.QLabel("Include Numbers")
@@ -63,36 +92,39 @@ class MainWindow(QtWidgets.QWidget):
         lbl_numbers.setBuddy(self.chkbox_numbers)
         lbl_symbols.setBuddy(self.chkbox_symbols)
 
+
+        # ------------------[Layout]----------------------
+        container.layout().addWidget(lbl_length, 0, 0, 1, 3)
+        container.layout().addWidget(self.sld_pw_length_val, 0, 5)
+
+        container.layout().addWidget(lbl_uppercase, 1, 0, 1, 3)
+        container.layout().addWidget(self.chkbox_uppercase, 1, 5)
+
+        container.layout().addWidget(lbl_lowercase, 2, 0, 1, 3)
+        container.layout().addWidget(self.chkbox_lowercase, 2, 5)
+
+        container.layout().addWidget(lbl_numbers, 3, 0, 1, 3)
+        container.layout().addWidget(self.chkbox_numbers, 3, 5)
+
+        container.layout().addWidget(lbl_symbols, 4, 0, 1, 3)
+        container.layout().addWidget(self.chkbox_symbols, 4, 5)
+
+        # Add widget to main widget
+        self.layout().addWidget(container)
+
+    def add_button(self):
+        """Adds button."""
+        
+        container = QtWidgets.QWidget()
+        container.setLayout(QtWidgets.QHBoxLayout())
+
         # Button
-        btn_generate = QtWidgets.QPushButton(
+        btn_generate_pw = QtWidgets.QPushButton(
             "Generate Password", clicked=lambda: self.generate_password()
         )
 
-        # ------------------[Layout]----------------------
-        container.layout().addWidget(self.display, 0, 0, 1, 5)
+        container.layout().addWidget(btn_generate_pw)
 
-        # container.layout().addWidget(lbl_min_length, 1, 0)
-        # container.layout().addWidget(lbl_max_length, 1, 5)
-        container.layout().addWidget(self.sld_pw_length, 1, 0, 1, 5)
-
-        container.layout().addWidget(lbl_length, 2, 0, 1, 2)
-        container.layout().addWidget(self.sld_pw_length_val, 2, 5)
-
-        container.layout().addWidget(lbl_uppercase, 3, 0, 1, 3)
-        container.layout().addWidget(self.chkbox_uppercase, 3, 5)
-
-        container.layout().addWidget(lbl_lowercase, 4, 0, 1, 3)
-        container.layout().addWidget(self.chkbox_lowercase, 4, 5)
-
-        container.layout().addWidget(lbl_numbers, 5, 0, 1, 3)
-        container.layout().addWidget(self.chkbox_numbers, 5, 5)
-
-        container.layout().addWidget(lbl_symbols, 6, 0, 1, 3)
-        container.layout().addWidget(self.chkbox_symbols, 6, 5)
-
-        container.layout().addWidget(btn_generate, 7, 0, 1, 5)
-
-        # Add widget to main widget
         self.layout().addWidget(container)
 
     def update_slider_value(self):
@@ -104,25 +136,27 @@ class MainWindow(QtWidgets.QWidget):
     def generate_password(self):
         """Generates a password that satisfies the user's criteria."""
 
+        if self.chkbox_uppercase.isChecked():
+            self.pw_params += string.ascii_uppercase
+
+        if self.chkbox_lowercase.isChecked():
+            self.pw_params += string.ascii_lowercase
+
+        if self.chkbox_numbers.isChecked():
+            self.pw_params += string.digits
+
+        if self.chkbox_symbols.isChecked():
+            self.pw_params += string.punctuation
+
         try:
-            if self.chkbox_uppercase.isChecked():
-                self.pw_params += string.ascii_uppercase
-
-            if self.chkbox_lowercase.isChecked():
-                self.pw_params += string.ascii_lowercase
-
-            if self.chkbox_numbers.isChecked():
-                self.pw_params += string.digits
-
-            if self.chkbox_symbols.isChecked():
-                self.pw_params += string.punctuation
-
             # Create a password from the parameters
             password = random.sample(self.pw_params, self.sld_value)
             password = "".join(password)
 
             # Display password
             self.display.setText(password)
+        except AttributeError:
+            self.display.setText('Password length required.')
         except ValueError:
             self.display.setText('Enter parameters for password.')
 

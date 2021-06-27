@@ -33,20 +33,14 @@ class MainWindow(QtWidgets.QWidget):
 
         # Slider
         self.sld_pw_length = QtWidgets.QSlider(QtCore.Qt.Horizontal)
-        self.sld_pw_length.setValue(4)
-        self.sld_pw_length.setRange(4, 16)
+        self.sld_pw_length.setValue(0)
+        self.sld_pw_length.setRange(0, 16)
         self.sld_pw_length.setTickInterval(4)
         self.sld_pw_length.setTickPosition(QtWidgets.QSlider.TicksBelow)
         self.sld_pw_length.setSingleStep(1)
 
         # Displaying Slider value
-        self.sld_value = self.sld_pw_length.sliderPosition()
-        self.sld_pw_length_val = QtWidgets.QLabel()
-        QtCore.QObject.connect(
-            self.sld_pw_length,
-            QtCore.SIGNAL("valueChanged(int)"),
-            self.update_slider_value,
-        )
+        self.sld_pw_length.valueChanged.connect(self.update_slider_value)
 
         # CheckBox
         self.chkbox_uppercase = QtWidgets.QCheckBox()
@@ -56,7 +50,8 @@ class MainWindow(QtWidgets.QWidget):
 
         # Labels
         lbl_length = QtWidgets.QLabel("Length:")
-        lbl_min_length = QtWidgets.QLabel("4")
+        self.sld_pw_length_val = QtWidgets.QLabel()
+        lbl_min_length = QtWidgets.QLabel("0")
         lbl_max_length = QtWidgets.QLabel("16")
         lbl_uppercase = QtWidgets.QLabel("Include Uppercase")
         lbl_lowercase = QtWidgets.QLabel("Include Lowercase")
@@ -71,7 +66,7 @@ class MainWindow(QtWidgets.QWidget):
 
         # Button
         btn_generate = QtWidgets.QPushButton(
-            "Generate Password", clicked=lambda: self.generate_pw()
+            "Generate Password", clicked=lambda: self.generate_password()
         )
 
         # ------------------[Layout]----------------------
@@ -104,30 +99,33 @@ class MainWindow(QtWidgets.QWidget):
     def update_slider_value(self):
         """Updates the value of the slider everytime it's moved."""
 
+        self.sld_value = self.sld_pw_length.value()
         self.sld_pw_length_val.setText(str(self.sld_value))
 
-    def generate_pw(self):
+    def generate_password(self):
         """Generates a password that satisfies the user's criteria."""
 
-        if self.chkbox_uppercase.isChecked():
-            self.pw_params += string.ascii_uppercase
+        try:
+            if self.chkbox_uppercase.isChecked():
+                self.pw_params += string.ascii_uppercase
 
-        if self.chkbox_lowercase.isChecked():
-            self.pw_params += string.ascii_lowercase
+            if self.chkbox_lowercase.isChecked():
+                self.pw_params += string.ascii_lowercase
 
-        if self.chkbox_numbers.isChecked():
-            self.pw_params += string.digits
+            if self.chkbox_numbers.isChecked():
+                self.pw_params += string.digits
 
-        if self.chkbox_symbols.isChecked():
-            self.pw_params += string.punctuation
+            if self.chkbox_symbols.isChecked():
+                self.pw_params += string.punctuation
 
-        # Create a password from the parameters
-        # randrange
-        password = random.sample(self.pw_params, 8)
-        password = ''.join(password)
+            # Create a password from the parameters
+            password = random.sample(self.pw_params, self.sld_value)
+            password = "".join(password)
 
-        # Display password
-        self.display.setText(password)
+            # Display password
+            self.display.setText(password)
+        except ValueError:
+            self.display.setText('Enter parameters for password.')
 
 
 def main():

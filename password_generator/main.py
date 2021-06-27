@@ -28,6 +28,7 @@ class MainWindow(QtWidgets.QWidget):
 
         container = QtWidgets.QWidget()
         container.setLayout(QtWidgets.QHBoxLayout())
+        container.layout().setContentsMargins(0, 0, 0, 0)
 
         # Display
         self.display = QtWidgets.QLineEdit()
@@ -43,6 +44,7 @@ class MainWindow(QtWidgets.QWidget):
 
         container = QtWidgets.QWidget()
         container.setLayout(QtWidgets.QHBoxLayout())
+        container.layout().setContentsMargins(0, 0, 0, 0)
 
         # Slider
         self.sld_pw_length = QtWidgets.QSlider(QtCore.Qt.Horizontal)

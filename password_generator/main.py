@@ -1,7 +1,6 @@
 import sys
 import string
 import random
-
 from PySide6 import QtWidgets
 from PySide6 import QtGui
 from PySide6 import QtCore
@@ -11,7 +10,7 @@ class MainWindow(QtWidgets.QWidget):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Password Generator")
-        self.setGeometry(400, 500, 400, 500)
+        self.setGeometry(3000, 500, 400, 500)
         self.setLayout(QtWidgets.QVBoxLayout())
         self.contents()
 
@@ -49,10 +48,10 @@ class MainWindow(QtWidgets.QWidget):
         self.chkbox_symbols = QtWidgets.QCheckBox()
 
         # Labels
-        lbl_length = QtWidgets.QLabel("Length:")
-        self.sld_pw_length_val = QtWidgets.QLabel()
-        lbl_min_length = QtWidgets.QLabel("0")
-        lbl_max_length = QtWidgets.QLabel("16")
+        lbl_length = QtWidgets.QLabel("Password length:")
+        self.sld_pw_length_val = QtWidgets.QLabel('')
+        # lbl_min_length = QtWidgets.QLabel("0")
+        # lbl_max_length = QtWidgets.QLabel("16")
         lbl_uppercase = QtWidgets.QLabel("Include Uppercase")
         lbl_lowercase = QtWidgets.QLabel("Include Lowercase")
         lbl_numbers = QtWidgets.QLabel("Include Numbers")
@@ -72,12 +71,12 @@ class MainWindow(QtWidgets.QWidget):
         # ------------------[Layout]----------------------
         container.layout().addWidget(self.display, 0, 0, 1, 5)
 
-        container.layout().addWidget(lbl_length, 1, 0, 1, 2)
-        container.layout().addWidget(self.sld_pw_length_val, 1, 3)
+        # container.layout().addWidget(lbl_min_length, 1, 0)
+        # container.layout().addWidget(lbl_max_length, 1, 5)
+        container.layout().addWidget(self.sld_pw_length, 1, 0, 1, 5)
 
-        container.layout().addWidget(lbl_min_length, 2, 0)
-        container.layout().addWidget(self.sld_pw_length, 2, 1, 1, 4)
-        container.layout().addWidget(lbl_max_length, 2, 5)
+        container.layout().addWidget(lbl_length, 2, 0, 1, 2)
+        container.layout().addWidget(self.sld_pw_length_val, 2, 5)
 
         container.layout().addWidget(lbl_uppercase, 3, 0, 1, 3)
         container.layout().addWidget(self.chkbox_uppercase, 3, 5)

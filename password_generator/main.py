@@ -12,6 +12,7 @@ class MainWindow(QtWidgets.QWidget):
         self.setWindowTitle("Password Generator")
         self.setGeometry(3000, 500, 400, 500)
         self.setLayout(QtWidgets.QVBoxLayout())
+        # self.layout().setContentsMargins(0, 0, 0, 0)
 
         # Add Contents
         self.add_display()
@@ -94,7 +95,6 @@ class MainWindow(QtWidgets.QWidget):
         lbl_numbers.setBuddy(self.chkbox_numbers)
         lbl_symbols.setBuddy(self.chkbox_symbols)
 
-
         # ------------------[Layout]----------------------
         container.layout().addWidget(lbl_length, 0, 0, 1, 3)
         container.layout().addWidget(self.sld_pw_length_val, 0, 5)
@@ -116,7 +116,7 @@ class MainWindow(QtWidgets.QWidget):
 
     def add_button(self):
         """Adds button."""
-        
+ 
         container = QtWidgets.QWidget()
         container.setLayout(QtWidgets.QHBoxLayout())
 
